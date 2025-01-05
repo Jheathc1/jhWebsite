@@ -6,6 +6,8 @@ import { GitHub, Linkedin, Mail, FileText } from "react-feather";
 import resumePDF from "./assets/jacob_heathcoat_resume.pdf";
 import PDFViewer from "./components/PDFViewer";
 import CareerSection from "./components/CareerSection";
+import SkillsSection from './components/SkillsSection';
+import RaindropTransition from "./components/RaindropTransition";
 
 const App = () => {
   const gridRef = useRef(null);
@@ -252,6 +254,8 @@ const App = () => {
 
         {/* Career Section */}
         <CareerSection />
+        {/* Skills Section */}
+        <RaindropTransition />
       </div>
     </div>
   );
