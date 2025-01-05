@@ -4,25 +4,46 @@ import ConcentricCircles from './ConcentricCircles';
 
 const CareerSection = () => {
   const [activeSection, setActiveSection] = useState('education');
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [pendingSection, setPendingSection] = useState(null);
+
+  const handleSectionClick = (section) => {
+    if (section === activeSection || isTransitioning) return;
+    
+    setIsTransitioning(true);
+    setPendingSection(section);
+  };
+
+  const handleTransitionComplete = () => {
+    if (pendingSection) {
+      setActiveSection(pendingSection);
+      setPendingSection(null);
+      // Increased delay to ensure section expansion completes first
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 500); // Increased from 100ms to 500ms
+    }
+  };
 
   return (
-    <div className="relative w-full bg-gray-900/95 min-h-screen backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto px-6 py-24">
-        <div className="flex gap-4 transition-all duration-500 ease-in-out">
+    <div className="w-full py-24">
+      <div className="w-full bg-gray-900/95 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-6 py-24">
+          <div className="flex gap-4 transition-all duration-500 ease-in-out">
           {/* Education Section */}
           <div 
-            className={`relative rounded-2xl bg-gray-800/50 p-8 transition-all duration-500 ease-in-out cursor-pointer min-h-[400px]
-              ${activeSection === 'education' ? 'w-[75%]' : 'w-[25%]'}`}
-            onClick={() => setActiveSection('education')}
+            className={`relative rounded-2xl bg-gray-800/50 p-8 transition-all duration-500 ease-in-out cursor-pointer min-h-[400px] overflow-hidden
+              ${activeSection === 'education' ? 'w-[1500px]' : 'w-[500px]'}
+              min-h-[400px] h-[400px]`}
+            onClick={() => handleSectionClick('education')}
           >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-4xl font-bold text-white">Education</h2>
             </div>
             
             <div className={`transition-opacity duration-500 ${
-              activeSection === 'education' ? 'opacity-100' : 'opacity-0 hidden'
+              activeSection === 'education' ? 'opacity-100' : 'opacity-0'
             }`}>
-              {/* Full Education Content */}
               <div className="space-y-8">
                 <div className="border-l-2 border-purple-500 pl-4">
                   <h3 className="text-xl font-semibold text-white">
@@ -64,32 +85,36 @@ const CareerSection = () => {
               </div>
             </div>
             
-            {/* Collapsed View */}
+            {/* Collapsed View with Circles */}
             <div className={`absolute inset-0 flex items-center justify-center 
               ${activeSection === 'education' 
                 ? 'opacity-0 pointer-events-none transition-opacity duration-200' 
                 : 'opacity-100 transition-opacity duration-700 delay-700'}`}
             >
               <div className="w-full h-full">
-                <ConcentricCircles isActive={activeSection !== 'education'} />
+                <ConcentricCircles 
+                  isActive={activeSection !== 'education'} 
+                  isTransitioning={isTransitioning && pendingSection === 'education'}
+                  onTransitionComplete={handleTransitionComplete}
+                />
               </div>
             </div>
           </div>
 
           {/* Career Section */}
           <div 
-            className={`relative rounded-2xl bg-gray-800/50 p-8 transition-all duration-500 ease-in-out cursor-pointer min-h-[400px]
-              ${activeSection === 'career' ? 'w-[75%]' : 'w-[25%]'}`}
-            onClick={() => setActiveSection('career')}
+            className={`relative rounded-2xl bg-gray-800/50 p-8 transition-all duration-500 ease-in-out cursor-pointer min-h-[400px] overflow-hidden
+              ${activeSection === 'career' ? 'w-[1500px]' : 'w-[500px]'}
+              min-h-[400px] h-[400px]`}
+            onClick={() => handleSectionClick('career')}
           >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-4xl font-bold text-white">Career</h2>
             </div>
 
             <div className={`transition-opacity duration-500 ${
-              activeSection === 'career' ? 'opacity-100' : 'opacity-0 hidden'
+              activeSection === 'career' ? 'opacity-100' : 'opacity-0'
             }`}>
-              {/* Full Career Content */}
               <div className="space-y-8">
                 <div className="border-l-2 border-blue-500 pl-4">
                   <h3 className="text-xl font-semibold text-white">
@@ -155,19 +180,24 @@ const CareerSection = () => {
               </div>
             </div>
 
-            {/* Collapsed View */}
+            {/* Collapsed View with Circles */}
             <div className={`absolute inset-0 flex items-center justify-center 
               ${activeSection === 'career' 
                 ? 'opacity-0 pointer-events-none transition-opacity duration-200' 
                 : 'opacity-100 transition-opacity duration-700 delay-700'}`}
             >
               <div className="w-full h-full">
-                <ConcentricCircles isActive={activeSection !== 'career'} />
+                <ConcentricCircles 
+                  isActive={activeSection !== 'career'} 
+                  isTransitioning={isTransitioning && pendingSection === 'career'}
+                  onTransitionComplete={handleTransitionComplete}
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
