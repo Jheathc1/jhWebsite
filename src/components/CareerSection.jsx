@@ -18,10 +18,10 @@ const CareerSection = () => {
     if (pendingSection) {
       setActiveSection(pendingSection);
       setPendingSection(null);
-      // Increased delay to ensure section expansion completes first
+
       setTimeout(() => {
         setIsTransitioning(false);
-      }, 500); // Increased from 100ms to 500ms
+      }, 500);
     }
   };
 

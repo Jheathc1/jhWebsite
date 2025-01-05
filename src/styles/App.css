@@ -3,6 +3,9 @@
   --mouse-x: 50%;
   --mouse-y: 50%;
   --gradient-angle: 0deg;
+  position: fixed !important;
+  width: 100%;
+  height: 100vh;
 }
 
 .gradient-text {
