@@ -6,8 +6,9 @@ import { GitHub, Linkedin, Mail, FileText } from "react-feather";
 import resumePDF from "./assets/jacob_heathcoat_resume.pdf";
 import PDFViewer from "./components/PDFViewer";
 import CareerSection from "./components/CareerSection";
-import SkillsSection from './components/SkillsSection';
+import SkillsSection from "./components/SkillsSection";
 import RaindropTransition from "./components/RaindropTransition";
+import Footer from "./components/Footer";
 
 const App = () => {
   const gridRef = useRef(null);
@@ -47,7 +48,9 @@ const App = () => {
       gsap.to(grid, {
         "--mouse-x": `${x}%`,
         "--mouse-y": `${y}%`,
-        "--gradient-angle": `${Math.atan2(y - 50, x - 50) * (180 / Math.PI)}deg`,
+        "--gradient-angle": `${
+          Math.atan2(y - 50, x - 50) * (180 / Math.PI)
+        }deg`,
         duration: 0.5,
         ease: "power2.out",
       });
@@ -93,29 +96,29 @@ const App = () => {
     if (orbGlowRef.current && orbInnerRef.current) {
       // glow effect
       gsap.to(orbGlowRef.current, {
-        background: isOrbActive 
-          ? 'linear-gradient(to right, rgb(192, 132, 252), rgb(236, 72, 153))'
-          : 'rgb(75, 85, 99)',
+        background: isOrbActive
+          ? "linear-gradient(to right, rgb(192, 132, 252), rgb(236, 72, 153))"
+          : "rgb(75, 85, 99)",
         opacity: isOrbActive ? 0.5 : 0,
         scale: isOrbActive ? 1 : 0.95,
         duration: 1,
-        ease: "power2.inOut"
+        ease: "power2.inOut",
       });
 
       // inner orb
       gsap.to(orbInnerRef.current, {
-        background: isOrbActive 
-          ? 'linear-gradient(to right, rgb(192, 132, 252), rgb(236, 72, 153))'
-          : 'rgb(55, 65, 81)',
+        background: isOrbActive
+          ? "linear-gradient(to right, rgb(192, 132, 252), rgb(236, 72, 153))"
+          : "rgb(55, 65, 81)",
         scale: isOrbActive ? 1 : 0.95,
         duration: 1,
-        ease: "power2.inOut"
+        ease: "power2.inOut",
       });
     }
   }, [isOrbActive]);
 
   return (
-    <div className="relative bg-gray-900 text-white">
+    <div className="min-h-screen w-full relative bg-gray-900 text-white">
       {/* Fixed background elements */}
       <div className="fixed inset-0">
         {/* Grid with mouse interaction */}
@@ -241,7 +244,7 @@ const App = () => {
                 >
                   <FileText className="w-6 h-6" />
                 </button>
-                
+
                 <PDFViewer
                   isOpen={isPDFOpen}
                   onClose={() => setIsPDFOpen(false)}
@@ -255,7 +258,10 @@ const App = () => {
         {/* Career Section */}
         <CareerSection />
         {/* Skills Section */}
-        <RaindropTransition />
+        <SkillsSection />
+        <div className="h-[600px]" />
+        {/* Footer */}
+        <Footer />
       </div>
     </div>
   );
