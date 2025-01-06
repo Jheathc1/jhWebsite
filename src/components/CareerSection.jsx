@@ -146,7 +146,7 @@ const CareerSection = () => {
                     </p>
                     <p className="text-gray-400 mt-2">
                       <DecodeText 
-                        text="Leveraged network monitoring tools and technical expertise to redesign infrastructure, diagnose signal issues across RF and optical systems, create comprehensive documentation, and train team members while maintaining high network reliability through proactive maintenance and strategic upgrades."
+                        text="Leveraged network monitoring tools and technical expertise to redesign infrastructure and diagnose signal issues across RF and optical systems."
                         isActive={activeSection === 'career'}
                         delay={600}
                       />
@@ -177,7 +177,7 @@ const CareerSection = () => {
                     </p>
                     <p className="text-gray-400 mt-2">
                       <DecodeText 
-                        text="Installed and maintained residential broadband services while providing expert troubleshooting support, mentoring new technicians, and staying current with emerging technologies to ensure optimal service delivery across internet, security, TV, and phone systems."
+                        text="Installed and maintained residential broadband services while providing expert troubleshooting support and mentoring new technicians."
                         isActive={activeSection === 'career'}
                         delay={1000}
                       />
