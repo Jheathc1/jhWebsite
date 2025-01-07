@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import DecodeText from './DecodeText';
 import ConcentricCircles from './ConcentricCircles';
+import { refreshSkillsSection } from './SkillsSection';
 
 const CareerSection = () => {
   const [activeSection, setActiveSection] = useState('education');
@@ -9,7 +10,6 @@ const CareerSection = () => {
 
   const handleSectionClick = (section) => {
     if (section === activeSection || isTransitioning) return;
-    
     setIsTransitioning(true);
     setPendingSection(section);
   };

@@ -1,5 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
+import Lenis from '@studio-freight/lenis'
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./styles/App.css";
 import portPhoto from "./assets/portPhoto.jpeg";
 import { GitHub, Linkedin, Mail, FileText } from "react-feather";
@@ -9,6 +11,9 @@ import CareerSection from "./components/CareerSection";
 import SkillsSection from "./components/SkillsSection";
 import RaindropTransition from "./components/RaindropTransition";
 import Footer from "./components/Footer";
+
+// Register GSAP plugins
+gsap.registerPlugin(ScrollTrigger);
 
 const App = () => {
   const gridRef = useRef(null);
@@ -26,6 +31,37 @@ const App = () => {
     { from: "#60A5FA", to: "#34D399" },
     { from: "#F59E0B", to: "#EC4899" },
   ];
+
+  // Initialize Lenis smooth scroll
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      smooth: true,
+      smoothTouch: false,
+      touchMultiplier: 2,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    // Integrate Lenis with GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+
+    return () => {
+      lenis.destroy();
+      gsap.ticker.remove(lenis.raf);
+    };
+  }, []);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -48,9 +84,7 @@ const App = () => {
       gsap.to(grid, {
         "--mouse-x": `${x}%`,
         "--mouse-y": `${y}%`,
-        "--gradient-angle": `${
-          Math.atan2(y - 50, x - 50) * (180 / Math.PI)
-        }deg`,
+        "--gradient-angle": `${Math.atan2(y - 50, x - 50) * (180 / Math.PI)}deg`,
         duration: 0.5,
         ease: "power2.out",
       });
@@ -118,8 +152,13 @@ const App = () => {
   }, [isOrbActive]);
 
   return (
-    <div className="min-h-screen w-full relative bg-gray-900 text-white">
+    <div className="min-h-screen w-full relative bg-gray-900 text-white overflow-x-hidden">
       {/* Fixed background elements */}
+      <PDFViewer
+        isOpen={isPDFOpen}
+        onClose={() => setIsPDFOpen(false)}
+        pdfUrl={resumePDF}
+      />
       <div className="fixed inset-0">
         {/* Grid with mouse interaction */}
         <div
@@ -194,7 +233,8 @@ const App = () => {
                     experiences
                   </span>{" "}
                   <button
-                    onClick={() => setIsOrbActive(!isOrbActive)}
+                    onClick={() => [setIsOrbActive(!isOrbActive), refreshSkillsSection()]}
+                    
                     className="relative inline-flex items-center justify-center w-10 h-10 focus:outline-none transform-gpu"
                   >
                     <div className="absolute w-full h-full">
@@ -244,12 +284,6 @@ const App = () => {
                 >
                   <FileText className="w-6 h-6" />
                 </button>
-
-                <PDFViewer
-                  isOpen={isPDFOpen}
-                  onClose={() => setIsPDFOpen(false)}
-                  pdfUrl={resumePDF}
-                />
               </div>
             </div>
           </div>

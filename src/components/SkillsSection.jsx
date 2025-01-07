@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState, useEffect, useCallback } from 'react';
 import { Server, Layout, Cloud, Users } from 'lucide-react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
@@ -7,10 +7,14 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+// Create a global event system for ScrollTrigger refreshes
+const refreshEvent = new CustomEvent('refreshSkillsSection');
+
 const SkillsSection = () => {
   const sectionRef = useRef(null);
   const accordionsRef = useRef(null);
   const accordionRefs = useRef([]);
+  const timelineRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
 
   const skillsData = [
@@ -41,93 +45,49 @@ const SkillsSection = () => {
   ];
 
   useLayoutEffect(() => {
-    if (!isReady) return; // Prevent animations from running until ready
-
     const ctx = gsap.context(() => {
-      const container = accordionsRef.current;
-      const accordions = accordionRefs.current;
-      
-      // Initial state setup
-      gsap.set(container, { y: -350, opacity: 0.1 });
-      
-      accordions.forEach(accordion => {
-        gsap.set(accordion, {
-          height: "5rem",
-          marginBottom: "-4.5rem",
-          opacity: 0.1,
-        });
-        
-        const content = accordion.querySelector('.accordion-content');
-        gsap.set(content, { opacity: 0 });
-      });
+      if (!isReady || !sectionRef.current || !accordionsRef.current) return;
 
-      // Create timeline
-      const tl = gsap.timeline({
+      // Create a marker for the scroll position
+      const marker = gsap.to({}, {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top 60%",
           end: "+=800",
-          scrub: 1,
+          onToggle: (self) => {
+            if (self.isActive && !timelineRef.current) {
+              initAnimations();
+            }
+          }
         }
       });
 
-      // Initial movement and fade-in
-      tl.to([container, accordions], {
-        opacity: 1,
-        duration: 0.5,
-        ease: "none",
-      })
-        .to(container, {
-          y: 0,
-          duration: 0.5,
-          ease: "none",
-        }, "<");
+      return () => {
+        marker.kill();
+      };
+    });
 
-      // Expand accordions
-      accordions.forEach((accordion, index) => {
-        const content = accordion.querySelector('.accordion-content');
-        const fullHeight = content.scrollHeight + 80;
-
-        const startPosition = 0.25 + index * 0.2;
-
-        tl.to(accordion, {
-          height: fullHeight,
-          marginBottom: "1.5rem",
-          duration: 0.5,
-          ease: "none",
-        }, startPosition);
-
-        tl.to(content, {
-          opacity: 1,
-          duration: 0.3,
-          ease: "none",
-        }, startPosition + 0.05);
-      });
-    }, sectionRef);
-
-    ScrollTrigger.refresh(); // Refresh after setup
-
-    return () => ctx.revert(); // Cleanup
-  }, [isReady]); // Run animation only when `isReady` is true
+    return () => ctx.revert();
+  }, [isReady]);
 
   useLayoutEffect(() => {
-    // Delay to ensure DOM is fully rendered before initializing animations
     const timeout = setTimeout(() => {
-      setIsReady(true); // Trigger GSAP initialization
+      setIsReady(true);
     }, 100);
 
-    return () => clearTimeout(timeout); // Cleanup timeout on unmount
+    return () => clearTimeout(timeout);
   }, []);
+
 
   return (
     <div ref={sectionRef} className="w-full py-24 -mt-32 relative -z-10">
-      <div className="max-w-4xl mx-auto px-6">
-        <div ref={accordionsRef} className="relative space-y-0">
+      <div className="max-w-7xl mx-auto px-6">
+        <div ref={accordionsRef} className="grid grid-cols-2 gap-6">
           {skillsData.map((skill, index) => (
             <div
               key={index}
               ref={el => (accordionRefs.current[index] = el)}
-              className="rounded-xl bg-gray-800/50 backdrop-blur-sm p-8 shadow-lg 
+              className="rounded-xl bg-gray-800 p-8 shadow-lg 
                 transition-all duration-300 ease-in-out border border-transparent 
                 hover:border-purple-500/50 relative overflow-hidden group"
               style={{
@@ -161,6 +121,11 @@ const SkillsSection = () => {
       </div>
     </div>
   );
+};
+
+// Export the refresh event so other components can trigger it
+export const refreshSkillsSection = () => {
+  window.dispatchEvent(refreshEvent);
 };
 
 export default SkillsSection;
