@@ -233,7 +233,7 @@ const App = () => {
                     experiences
                   </span>{" "}
                   <button
-                    onClick={() => [setIsOrbActive(!isOrbActive), refreshSkillsSection()]}
+                    onClick={() => setIsOrbActive(!isOrbActive)}
                     
                     className="relative inline-flex items-center justify-center w-10 h-10 focus:outline-none transform-gpu"
                   >
