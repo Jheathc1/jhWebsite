@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import DecodeText from './DecodeText';
 import ConcentricCircles from './ConcentricCircles';
-import { refreshSkillsSection } from './SkillsSection';
+
+// Memoized version of ConcentricCircles
+const MemoizedConcentricCircles = memo(ConcentricCircles);
 
 const CareerSection = () => {
   const [activeSection, setActiveSection] = useState('education');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [pendingSection, setPendingSection] = useState(null);
 
-  const handleSectionClick = (section) => {
+  const handleSectionClick = useCallback((section) => {
     if (section === activeSection || isTransitioning) return;
     setIsTransitioning(true);
     setPendingSection(section);
-  };
+  }, [activeSection, isTransitioning]);
 
-  const handleTransitionComplete = () => {
+  const handleTransitionComplete = useCallback(() => {
     if (pendingSection) {
       setActiveSection(pendingSection);
       setPendingSection(null);
@@ -23,7 +25,7 @@ const CareerSection = () => {
         setIsTransitioning(false);
       }, 500);
     }
-  };
+  }, [pendingSection]);
 
   return (
     <div className="w-full py-24">
@@ -107,11 +109,9 @@ const CareerSection = () => {
                 }`}
               >
                 <div className="w-full h-full">
-                  <ConcentricCircles
+                  <MemoizedConcentricCircles
                     isActive={activeSection !== 'education'}
-                    isTransitioning={
-                      isTransitioning && pendingSection === 'education'
-                    }
+                    isTransitioning={isTransitioning && pendingSection === 'education'}
                     onTransitionComplete={handleTransitionComplete}
                   />
                 </div>
@@ -219,11 +219,9 @@ const CareerSection = () => {
                 }`}
               >
                 <div className="w-full h-full">
-                  <ConcentricCircles
+                  <MemoizedConcentricCircles
                     isActive={activeSection !== 'career'}
-                    isTransitioning={
-                      isTransitioning && pendingSection === 'career'
-                    }
+                    isTransitioning={isTransitioning && pendingSection === 'career'}
                     onTransitionComplete={handleTransitionComplete}
                   />
                 </div>
@@ -236,4 +234,5 @@ const CareerSection = () => {
   );
 };
 
-export default CareerSection;
+// Use memo to prevent unnecessary rerenders from parent state changes
+export default memo(CareerSection);
