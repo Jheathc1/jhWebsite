@@ -37,7 +37,7 @@ const CareerSection = () => {
               className={`relative rounded-2xl bg-gray-800 p-8 transition-all duration-500 ease-in-out cursor-pointer overflow-hidden 
                 border border-transparent hover:border-purple-500/50
                 ${activeSection === 'education' ? 'w-[1500px]' : 'w-[500px]'}
-                min-h-[400px] h-[400px]`}
+                min-h-[400px] h-[425px]`}
               onClick={() => handleSectionClick('education')}
               style={{
                 boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)',
@@ -89,12 +89,26 @@ const CareerSection = () => {
                       />
                     </p>
                     <p className="text-gray-400 mt-2">
-                      <DecodeText
-                        text="Relevant coursework in algorithms, data structures, and software engineering."
-                        isActive={activeSection === 'education'}
-                        delay={700}
-                      />
-                    </p>
+                        <DecodeText
+                          text="Core coursework: Data Structures & Algorithms, Object-Oriented Programming, Software Design & Architecture, Web Development, Database Systems, Operating Systems, and Computer Networks."
+                          isActive={activeSection === 'education'}
+                          delay={700}
+                        />
+                      </p>
+                      <p className="text-gray-400 mt-2">
+                        <DecodeText
+                          text="Specialized courses: Cloud Computing, Agile Methodologies, Software Testing & Quality Assurance, Mobile App Development, and Software Security."
+                          isActive={activeSection === 'education'}
+                          delay={800}
+                        />
+                      </p>
+                      <p className="text-gray-400 mt-2">
+                        <DecodeText
+                          text="Projects: Full-stack web applications, distributed systems design, and enterprise software development using modern frameworks and tools."
+                          isActive={activeSection === 'education'}
+                          delay={900}
+                        />
+                      </p>
                   </div>
                 </div>
               </div>
@@ -123,7 +137,7 @@ const CareerSection = () => {
               className={`relative rounded-2xl bg-gray-800 p-8 transition-all duration-500 ease-in-out cursor-pointer overflow-hidden 
                 border border-transparent hover:border-purple-500/50
                 ${activeSection === 'career' ? 'w-[1500px]' : 'w-[500px]'}
-                min-h-[400px] h-[400px]`}
+                min-h-[400px] h-[425px]`}
               onClick={() => handleSectionClick('career')}
               style={{
                 boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)',

@@ -1,14 +1,62 @@
-import React, { useLayoutEffect, useRef, useState, useEffect, useCallback } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Server, Layout, Cloud, Users } from 'lucide-react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+
+// Import backend icons
+import GithubIcon from '../assets/icons/backend/GithubIcon.svg';
+import GitIcon from '../assets/icons/backend/GitIcon.svg';
+import JavaIcon from '../assets/icons/backend/JavaIcon.svg';
+import JavascriptIcon from '../assets/icons/backend/JavascriptIcon.svg';
+import MongoDBIcon from '../assets/icons/backend/MongoDBIcon.svg';
+import NodejsIcon from '../assets/icons/backend/NodejsIcon.svg';
+import PostgreSQLIcon from '../assets/icons/backend/PostgreSQLIcon.svg';
+import PythonIcon from '../assets/icons/backend/PythonIcon.svg';
+import TypescriptIcon from '../assets/icons/backend/TypescriptIcon.svg';
+
+// Import frontend icons
+import AngularIcon from '../assets/icons/frontend/AngularIcon.svg';
+import FigmaVectorIcon from '../assets/icons/frontend/FigmaVectorIcon.svg';
+import FlutterSVGIcon from '../assets/icons/frontend/FlutterSVGIcon.svg';
+import ReactJSIcon from '../assets/icons/frontend/ReactJSIcon.svg';
+import TailwindCSSIcon from '../assets/icons/frontend/TailwindCSSIcon.svg';
+import Vue9Logo from '../assets/icons/frontend/Vue9Logo.svg';
+
+// Import cloud icons
+import AWSVectorIcon from '../assets/icons/cloud/AWSVectorIcon.svg';
+import AzureDevOpsIcon from '../assets/icons/cloud/AzureDevOpsIcon.svg';
+import DockerSVGIcon from '../assets/icons/cloud/DockerSVGIcon.svg';
+import LinuxVectorIcon from '../assets/icons/cloud/LinuxVectorIcon.svg';
+import VercelFillIcon from '../assets/icons/cloud/VercelFillIcon.svg';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// Create a global event system for ScrollTrigger refreshes
 const refreshEvent = new CustomEvent('refreshSkillsSection');
+
+const IconWithTooltip = ({ src, alt }) => (
+  <div className="inline-block relative">
+    <img
+      src={src}
+      alt={alt}
+      className="w-8 h-8 object-contain peer transition-transform duration-200 hover:scale-110"
+    />
+    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 
+      bg-purple-600 text-white text-xs rounded-lg opacity-0 
+      peer-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none z-50
+      before:content-[''] before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 
+      before:border-4 before:border-transparent before:border-t-purple-600">
+      {alt}
+    </div>
+  </div>
+);
+
+const Rectangle = ({ label }) => (
+  <div className="px-4 py-2 rounded bg-purple-500/20 text-purple-400 text-sm font-medium">
+    {label}
+  </div>
+);
 
 const SkillsSection = () => {
   const sectionRef = useRef(null);
@@ -21,26 +69,53 @@ const SkillsSection = () => {
     {
       title: "Backend Development",
       icon: Server,
-      text: "Experienced in building robust server-side applications using Node.js, Python, and SQL/NoSQL databases. Proficient in RESTful API design and microservices architecture.",
-      iconContainer: "future-icons-here-1"
+      text: "Experienced in building robust server-side applications using Node.js, Python, and SQL/NoSQL databases. Proficient in RESTful API design.",
+      icons: [
+        { src: GithubIcon, alt: "Github" },
+        { src: GitIcon, alt: "Git" },
+        { src: JavaIcon, alt: "Java" },
+        { src: JavascriptIcon, alt: "JavaScript" },
+        { src: MongoDBIcon, alt: "MongoDB" },
+        { src: NodejsIcon, alt: "Node.js" },
+        { src: PostgreSQLIcon, alt: "PostgreSQL" },
+        { src: PythonIcon, alt: "Python" },
+        { src: TypescriptIcon, alt: "TypeScript" }
+      ]
     },
     {
       title: "Frontend Development",
       icon: Layout,
-      text: "Skilled in modern frontend frameworks like React and Next.js. Experienced with state management, responsive design, and creating engaging user interfaces.",
-      iconContainer: "future-icons-here-2"
+      text: "Skilled in modern frontend frameworks like React and Next.js. Experienced with responsive design and creating engaging user interfaces.",
+      icons: [
+        { src: AngularIcon, alt: "Angular" },
+        { src: FigmaVectorIcon, alt: "Figma" },
+        { src: FlutterSVGIcon, alt: "Flutter" },
+        { src: ReactJSIcon, alt: "React" },
+        { src: TailwindCSSIcon, alt: "Tailwind CSS" },
+        { src: Vue9Logo, alt: "Vue" }
+      ]
     },
     {
       title: "Cloud & DevOps",
       icon: Cloud,
-      text: "Proficient in AWS services, Docker containerization, and CI/CD pipelines. Experienced in infrastructure as code and automated deployment workflows.",
-      iconContainer: "future-icons-here-3"
+      text: "Proficient in AWS services, Docker containerization, and CI/CD pipelines. Experienced in automated deployment workflows.",
+      icons: [
+        { src: AWSVectorIcon, alt: "AWS" },
+        { src: AzureDevOpsIcon, alt: "Azure DevOps" },
+        { src: DockerSVGIcon, alt: "Docker" },
+        { src: LinuxVectorIcon, alt: "Linux" },
+        { src: VercelFillIcon, alt: "Vercel" }
+      ]
     },
     {
       title: "Team Collaboration",
       icon: Users,
-      text: "Strong communicator and team player with experience in Agile methodologies. Proven track record of successful project delivery and mentoring junior developers.",
-      iconContainer: "future-icons-here-4"
+      text: "Strong communicator and team player with experience in Agile methodologies. Proven track record of successful project delivery.",
+      rectangles: [
+        { label: "Agile", tooltip: "Agile Development Methodology" },
+        { label: "Scrum", tooltip: "Scrum Framework" },
+        { label: "Jira", tooltip: "Jira Project Management" }
+      ]
     }
   ];
 
@@ -48,7 +123,6 @@ const SkillsSection = () => {
     const ctx = gsap.context(() => {
       if (!isReady || !sectionRef.current || !accordionsRef.current) return;
 
-      // Create a marker for the scroll position
       const marker = gsap.to({}, {
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -56,7 +130,7 @@ const SkillsSection = () => {
           end: "+=800",
           onToggle: (self) => {
             if (self.isActive && !timelineRef.current) {
-              initAnimations();
+              // Initialize animations if needed
             }
           }
         }
@@ -78,7 +152,6 @@ const SkillsSection = () => {
     return () => clearTimeout(timeout);
   }, []);
 
-
   return (
     <div ref={sectionRef} className="w-full py-24 -mt-32 relative -z-10">
       <div className="max-w-7xl mx-auto px-6">
@@ -87,33 +160,38 @@ const SkillsSection = () => {
             <div
               key={index}
               ref={el => (accordionRefs.current[index] = el)}
-              className="rounded-xl bg-gray-800 p-8 shadow-lg 
-                transition-all duration-300 ease-in-out border border-transparent 
-                hover:border-purple-500/50 relative overflow-hidden group"
+              className="rounded-xl bg-gray-800 p-8 shadow-lg relative"
               style={{
                 boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)',
               }}
             >
-              <div className="accordion-title flex items-center gap-4">
+              <div className="flex items-center gap-4">
                 <div className="p-3 rounded-lg bg-purple-500/20">
                   <skill.icon className="w-6 h-6 text-purple-400" />
                 </div>
                 <h3 className="text-2xl font-bold text-white">{skill.title}</h3>
               </div>
               
-              <div className="accordion-content mt-4 space-y-4">
+              <div className="mt-4 space-y-4">
                 <p className="text-gray-300">{skill.text}</p>
-                <div className="h-16 flex items-center justify-center">
-                  <div className="text-gray-500">{skill.iconContainer}</div>
+                <div className="flex flex-wrap gap-4 items-center justify-start mt-4">
+                  {skill.icons ? (
+                    skill.icons.map((icon, iconIndex) => (
+                      <IconWithTooltip
+                        key={iconIndex}
+                        src={icon.src}
+                        alt={icon.alt}
+                      />
+                    ))
+                  ) : skill.rectangles && (
+                    skill.rectangles.map((rect, rectIndex) => (
+                      <Rectangle
+                        key={rectIndex}
+                        label={rect.label}
+                      />
+                    ))
+                  )}
                 </div>
-              </div>
-
-              <div className="absolute inset-0 border border-purple-500/20 rounded-xl 
-                group-hover:border-purple-500/50 transition-colors duration-300" />
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 
-                transition-opacity duration-300">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 
-                  to-blue-500/10 rounded-xl blur-xl" />
               </div>
             </div>
           ))}
@@ -123,7 +201,6 @@ const SkillsSection = () => {
   );
 };
 
-// Export the refresh event so other components can trigger it
 export const refreshSkillsSection = () => {
   window.dispatchEvent(refreshEvent);
 };
