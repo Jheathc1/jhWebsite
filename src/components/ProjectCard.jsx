@@ -156,7 +156,7 @@ const ProjectsSection = () => {
       title: "Island of Shared Meaning",
       description: "A custom mobile therapy application developed through client consultation and requirement analysis. Built with React Native and SQL, providing specialized therapeutic tools and features.",
       images: [appImage1, appImage2],
-      technologies: ["React Native", "SQL", "Javascript"],
+      technologies: ["React Native", "SQLite", "Javascript"],
       primaryLink: "https://apps.apple.com/us/app/island-of-shared-meaning/id6738144776",
       showGithub: false,
       primaryText: "View on App Store"
