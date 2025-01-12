@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { Server, Layout, Cloud, Users } from 'lucide-react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
@@ -33,18 +33,19 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+// Create a global event system for ScrollTrigger refreshes
 const refreshEvent = new CustomEvent('refreshSkillsSection');
 
 const IconWithTooltip = ({ src, alt }) => (
-  <div className="inline-block relative">
+  <div className="inline-flex relative group/iconTip">
     <img
       src={src}
       alt={alt}
-      className="w-8 h-8 object-contain peer transition-transform duration-200 hover:scale-110"
+      className="w-8 h-8 object-contain hover:scale-110 transition-transform duration-200"
     />
     <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 
       bg-purple-600 text-white text-xs rounded-lg opacity-0 
-      peer-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none z-50
+      group-hover/iconTip:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none z-50
       before:content-[''] before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 
       before:border-4 before:border-transparent before:border-t-purple-600">
       {alt}
@@ -60,9 +61,6 @@ const Rectangle = ({ label }) => (
 
 const SkillsSection = () => {
   const sectionRef = useRef(null);
-  const accordionsRef = useRef(null);
-  const accordionRefs = useRef([]);
-  const timelineRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
 
   const skillsData = [
@@ -112,39 +110,14 @@ const SkillsSection = () => {
       icon: Users,
       text: "Strong communicator and team player with experience in Agile methodologies. Proven track record of successful project delivery.",
       rectangles: [
-        { label: "Agile", tooltip: "Agile Development Methodology" },
-        { label: "Scrum", tooltip: "Scrum Framework" },
-        { label: "Jira", tooltip: "Jira Project Management" }
+        { label: "Agile" },
+        { label: "Scrum" },
+        { label: "Jira" }
       ]
     }
   ];
 
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      if (!isReady || !sectionRef.current || !accordionsRef.current) return;
-
-      const marker = gsap.to({}, {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 60%",
-          end: "+=800",
-          onToggle: (self) => {
-            if (self.isActive && !timelineRef.current) {
-              // Initialize animations if needed
-            }
-          }
-        }
-      });
-
-      return () => {
-        marker.kill();
-      };
-    });
-
-    return () => ctx.revert();
-  }, [isReady]);
-
-  useLayoutEffect(() => {
+  useEffect(() => {
     const timeout = setTimeout(() => {
       setIsReady(true);
     }, 100);
@@ -152,47 +125,77 @@ const SkillsSection = () => {
     return () => clearTimeout(timeout);
   }, []);
 
+  useLayoutEffect(() => {
+    if (!isReady) return;
+
+    const ctx = gsap.context(() => {
+      const cards = gsap.utils.toArray('.skill-card');
+      
+      cards.forEach((card) => {
+        gsap.set(card, { opacity: 0, y: 50 });
+        
+        gsap.to(card, {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top bottom-=100',
+            end: 'top center',
+            toggleActions: 'play none none none'
+          }
+        });
+      });
+
+      ScrollTrigger.refresh();
+    });
+
+    return () => ctx.revert();
+  }, [isReady]);
+
   return (
-    <div ref={sectionRef} className="w-full py-24 -mt-32 relative -z-10">
-      <div className="max-w-7xl mx-auto px-6">
-        <div ref={accordionsRef} className="grid grid-cols-2 gap-6">
+    <div ref={sectionRef} className="w-full py-24 -mt-32 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {skillsData.map((skill, index) => (
             <div
               key={index}
-              ref={el => (accordionRefs.current[index] = el)}
-              className="rounded-xl bg-gray-800 p-8 shadow-lg relative"
+              className="skill-card min-w-[280px] w-full rounded-xl bg-gray-800/80 backdrop-blur-sm p-8 
+                relative overflow-hidden shadow-lg transform transition-all duration-300 hover:-translate-y-1"
               style={{
                 boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)',
               }}
             >
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 mb-6">
                 <div className="p-3 rounded-lg bg-purple-500/20">
                   <skill.icon className="w-6 h-6 text-purple-400" />
                 </div>
                 <h3 className="text-2xl font-bold text-white">{skill.title}</h3>
               </div>
               
-              <div className="mt-4 space-y-4">
-                <p className="text-gray-300">{skill.text}</p>
-                <div className="flex flex-wrap gap-4 items-center justify-start mt-4">
-                  {skill.icons ? (
-                    skill.icons.map((icon, iconIndex) => (
-                      <IconWithTooltip
-                        key={iconIndex}
-                        src={icon.src}
-                        alt={icon.alt}
-                      />
-                    ))
-                  ) : skill.rectangles && (
-                    skill.rectangles.map((rect, rectIndex) => (
-                      <Rectangle
-                        key={rectIndex}
-                        label={rect.label}
-                      />
-                    ))
-                  )}
-                </div>
+              <p className="text-gray-300 mb-6">{skill.text}</p>
+              
+              <div className="flex flex-wrap gap-4 items-center justify-start">
+                {skill.icons ? (
+                  skill.icons.map((icon, iconIndex) => (
+                    <IconWithTooltip
+                      key={iconIndex}
+                      src={icon.src}
+                      alt={icon.alt}
+                    />
+                  ))
+                ) : skill.rectangles && (
+                  skill.rectangles.map((rect, rectIndex) => (
+                    <Rectangle
+                      key={rectIndex}
+                      label={rect.label}
+                    />
+                  ))
+                )}
               </div>
+
+              <div className="absolute inset-0 border border-purple-500/20 rounded-xl" />
             </div>
           ))}
         </div>
