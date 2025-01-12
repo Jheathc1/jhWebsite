@@ -97,16 +97,9 @@ const CareerSection = () => {
                       </p>
                       <p className="text-gray-400 mt-2">
                         <DecodeText
-                          text="Specialized courses: Cloud Computing, Agile Methodologies, Software Testing & Quality Assurance, Mobile App Development, and Software Security."
+                          text="Specialized courses: Cloud Computing, Agile Methodologies, Software Testing & Quality Assurance, Mobile App Development, Software Security and Machine Learning."
                           isActive={activeSection === 'education'}
                           delay={800}
-                        />
-                      </p>
-                      <p className="text-gray-400 mt-2">
-                        <DecodeText
-                          text="Projects: Full-stack web applications, distributed systems design, and enterprise software development using modern frameworks and tools."
-                          isActive={activeSection === 'education'}
-                          delay={900}
                         />
                       </p>
                   </div>

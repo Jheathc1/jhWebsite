@@ -11,6 +11,7 @@ import CareerSection from "./components/CareerSection";
 import SkillsSection from "./components/SkillsSection";
 import RaindropTransition from "./components/RaindropTransition";
 import Footer from "./components/Footer";
+import ProjectsSection from "./components/ProjectCard";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -257,7 +258,7 @@ const App = () => {
               {/* Social Links */}
               <div className="flex justify-center md:justify-start gap-6 pt-8 relative z-10">
                 <a
-                  href="https://linkedin.com"
+                  href="https://www.linkedin.com/in/jacob-heathcoat-3b1627343/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 rounded-lg backdrop-blur-sm bg-gray-800/80 hover:bg-gray-700/80 transition-colors"
@@ -265,7 +266,7 @@ const App = () => {
                   <Linkedin className="w-6 h-6" />
                 </a>
                 <a
-                  href="https://github.com"
+                  href="https://github.com/Jheathc1"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 rounded-lg backdrop-blur-sm bg-gray-800/80 hover:bg-gray-700/80 transition-colors"
@@ -273,7 +274,7 @@ const App = () => {
                   <GitHub className="w-6 h-6" />
                 </a>
                 <a
-                  href="mailto:contact@example.com"
+                  href="mailto:jh.heathcoat@gmail.com"
                   className="p-3 rounded-lg backdrop-blur-sm bg-gray-800/80 hover:bg-gray-700/80 transition-colors"
                 >
                   <Mail className="w-6 h-6" />
@@ -293,7 +294,8 @@ const App = () => {
         <CareerSection />
         {/* Skills Section */}
         <SkillsSection />
-        <div className="h-[600px]" />
+        <ProjectsSection />
+        <div className="h-[300px]" />
         {/* Footer */}
         <Footer />
       </div>
