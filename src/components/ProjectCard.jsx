@@ -16,36 +16,31 @@ const ProjectCard = ({ project }) => {
 
   useEffect(() => {
     const card = cardRef.current;
+    let st;
     
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: card,
-        start: 'top bottom-=100',
-        end: 'top center',
-        onEnter: () => setIsVisible(true),
-        once: true
-      }
-    });
+    gsap.set(card, { opacity: 0, y: 50 });
 
-    if (isVisible) {
-      tl.fromTo(card,
-        { 
-          opacity: 0,
-          y: 50 
-        },
-        {
+    st = ScrollTrigger.create({
+      trigger: card,
+      start: 'top bottom-=100',
+      end: 'top center',
+      onEnter: () => {
+        gsap.to(card, {
           opacity: 1,
           y: 0,
           duration: 1,
-          ease: 'power3.out'
-        }
-      );
-    }
+          ease: 'power3.out',
+          onComplete: () => gsap.set(card, { clearProps: 'transform' }) // Only clear transform
+        });
+      },
+      once: true,
+      markers: false
+    });
 
     return () => {
-      tl.kill();
+      if (st) st.kill();
     };
-  }, [isVisible]);
+  }, []);
 
   const handleProjectClick = (url) => {
     if (url) {
@@ -156,7 +151,7 @@ const ProjectsSection = () => {
       title: "Island of Shared Meaning",
       description: "A custom mobile therapy application developed through client consultation and requirement analysis. Built with React Native and SQL, providing specialized therapeutic tools and features.",
       images: [appImage1, appImage2],
-      technologies: ["React Native", "SQLite", "Javascript"],
+      technologies: ["React Native", "SQL", "Javascript"],
       primaryLink: "https://apps.apple.com/us/app/island-of-shared-meaning/id6738144776",
       showGithub: false,
       primaryText: "View on App Store"
@@ -203,14 +198,14 @@ const ProjectsSection = () => {
   }, [isReady]);
 
   return (
-    <div ref={sectionRef} className="w-full py-24 relative">
+    <div ref={sectionRef} className="w-full py-24 relative z-0">
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-16">
           <h2 className="section-title text-4xl font-bold text-white">Featured Projects</h2>
           <p className="section-description text-gray-400 font-bold mt-2">Here are some of the projects I've worked on</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-0">
           {projects.map((project, index) => (
             <ProjectCard key={index} project={project} />
           ))}

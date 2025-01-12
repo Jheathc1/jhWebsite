@@ -30,14 +30,14 @@ const CareerSection = () => {
   return (
     <div className="w-full py-24">
       <div className="w-full relative">
-        <div className="max-w-7xl mx-auto px-6 py-10">
-          <div className="flex gap-4 transition-all duration-500 ease-in-out">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-10">
+          <div className="flex flex-col md:flex-row gap-4 transition-all duration-500 ease-in-out">
             {/* Education Section */}
             <div
-              className={`relative rounded-2xl bg-gray-800 p-8 transition-all duration-500 ease-in-out cursor-pointer overflow-hidden 
+              className={`relative rounded-2xl bg-gray-800 p-6 md:p-8 transition-all duration-500 ease-in-out cursor-pointer overflow-hidden 
                 border border-transparent hover:border-purple-500/50
-                ${activeSection === 'education' ? 'w-[1500px]' : 'w-[500px]'}
-                min-h-[400px] h-[425px]`}
+                ${activeSection === 'education' ? 'w-full md:w-[1500px]' : 'w-full md:w-[500px]'}
+                min-h-[350px] md:min-h-[400px] h-[375px] md:h-[425px]`}
               onClick={() => handleSectionClick('education')}
               style={{
                 boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)',
@@ -49,46 +49,45 @@ const CareerSection = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-2xl blur-xl" />
               </div>
 
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-4xl font-bold text-white">Education</h2>
-              </div>
+              <div className="h-full flex flex-col">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-4xl font-bold text-white">Education</h2>
+                </div>
 
-              <div
-                className={`transition-opacity duration-500 ${
+                <div className={`flex-1 flex items-center transition-opacity duration-500 ${
                   activeSection === 'education' ? 'opacity-100' : 'opacity-0'
-                }`}
-              >
-                <div className="space-y-8">
-                  <div className="border-l-2 border-purple-500 pl-4">
-                    <h3 className="text-xl font-semibold text-white">
-                      <DecodeText
-                        text="Arizona State University"
-                        isActive={activeSection === 'education'}
-                        delay={300}
-                      />
-                    </h3>
-                    <p className="text-gray-400">
-                      <DecodeText
-                        text="Bachelor of Science in Software Engineering"
-                        isActive={activeSection === 'education'}
-                        delay={400}
-                      />
-                    </p>
-                    <p className="text-gray-500">
-                      <DecodeText
-                        text="2020 - 2025"
-                        isActive={activeSection === 'education'}
-                        delay={500}
-                      />
-                    </p>
-                    <p className="text-gray-400 mt-2">
-                      <DecodeText
-                        text="GPA (Current): 4.0"
-                        isActive={activeSection === 'education'}
-                        delay={600}
-                      />
-                    </p>
-                    <p className="text-gray-400 mt-2">
+                }`}>
+                  <div className="space-y-8">
+                    <div className="border-l-2 border-purple-500 pl-4">
+                      <h3 className="text-xl font-semibold text-white">
+                        <DecodeText
+                          text="Arizona State University"
+                          isActive={activeSection === 'education'}
+                          delay={300}
+                        />
+                      </h3>
+                      <p className="text-gray-400">
+                        <DecodeText
+                          text="Bachelor of Science in Software Engineering"
+                          isActive={activeSection === 'education'}
+                          delay={400}
+                        />
+                      </p>
+                      <p className="text-gray-500">
+                        <DecodeText
+                          text="2020 - 2025"
+                          isActive={activeSection === 'education'}
+                          delay={500}
+                        />
+                      </p>
+                      <p className="text-gray-400 mt-2">
+                        <DecodeText
+                          text="GPA (Current): 4.0"
+                          isActive={activeSection === 'education'}
+                          delay={600}
+                        />
+                      </p>
+                      <p className="text-gray-400 mt-2">
                         <DecodeText
                           text="Core coursework: Data Structures & Algorithms, Object-Oriented Programming, Software Design & Architecture, Web Development, Database Systems, Operating Systems, and Computer Networks."
                           isActive={activeSection === 'education'}
@@ -97,11 +96,19 @@ const CareerSection = () => {
                       </p>
                       <p className="text-gray-400 mt-2">
                         <DecodeText
-                          text="Specialized courses: Cloud Computing, Agile Methodologies, Software Testing & Quality Assurance, Mobile App Development, Software Security and Machine Learning."
+                          text="Specialized courses: Cloud Computing, Agile Methodologies, Software Testing & Quality Assurance, Mobile App Development, and Software Security."
                           isActive={activeSection === 'education'}
                           delay={800}
                         />
                       </p>
+                      <p className="text-gray-400 mt-2">
+                        <DecodeText
+                          text="Projects: Full-stack web applications, distributed systems design, and enterprise software development using modern frameworks and tools."
+                          isActive={activeSection === 'education'}
+                          delay={900}
+                        />
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>

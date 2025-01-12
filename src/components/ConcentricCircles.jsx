@@ -29,7 +29,12 @@ const ConcentricCircles = ({ isActive, isTransitioning, onTransitionComplete }) 
         timelineRef.current.kill();
         timelineRef.current = null;
       }
-      ScrollTrigger.getAll().forEach(st => st.kill());
+      // Only kill ScrollTriggers specific to this component
+      ScrollTrigger.getAll().forEach(st => {
+        if (st.vars.trigger === svgRef.current) {
+          st.kill();
+        }
+      });
       gsap.killTweensOf(containerRef.current);
     };
 
