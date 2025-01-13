@@ -54,14 +54,14 @@ const CareerSection = () => {
 
           {/* Content Container */}
           <div 
-            className="relative rounded-xl bg-gray-800 p-4 sm:p-8 min-h-[350px] overflow-hidden
+            className="relative rounded-xl bg-gray-800 p-4 sm:p-8 min-h-[400px] overflow-hidden
               border border-purple-500/20 transition-all duration-500"
             style={{
               boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)',
             }}
           >
             {/* Background Decoration */}
-            <div className="hidden md:block absolute right-8 w-64 h-64 top-1/2 -translate-y-1/2 overflow-hidden">
+            <div className="hidden xl:block absolute right-8 w-64 h-64 top-1/2 -translate-y-1/2 overflow-hidden">
               <MemoizedConcentricCircles
                 isActive={true}
                 isTransitioning={isTransitioning}
@@ -78,14 +78,14 @@ const CareerSection = () => {
             >
               <div className="space-y-4 sm:space-y-8 max-w-3xl relative z-10">
                 <div className="border-l-2 border-purple-500 pl-4">
-                  <h3 className="text-lg sm:text-xl font-semibold text-white">
+                  <h3 className="text-base lg:text-xl font-semibold text-white">
                     <DecodeText
                       text="Arizona State University"
                       isActive={activeTab === 'education'}
                       delay={300}
                     />
                   </h3>
-                  <p className="text-sm sm:text-base text-gray-400">
+                  <p className="text-sm lg:text-base text-gray-400">
                     <DecodeText
                       text="Bachelor of Science in Software Engineering"
                       isActive={activeTab === 'education'}
@@ -115,7 +115,7 @@ const CareerSection = () => {
                   </p>
                   <p className="text-sm sm:text-base text-gray-400 mt-2">
                     <DecodeText
-                      text="Specialized courses: Agile Methodologies, Software Testing & Quality Assurance, and Mobile App Development."
+                      text="Specialized courses: Cloud Computing, Agile Methodologies, Software Testing & Quality Assurance, Mobile App Development, Software Security and Machine Learning."
                       isActive={activeTab === 'education'}
                       delay={800}
                     />
