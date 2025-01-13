@@ -115,7 +115,7 @@ const CareerSection = () => {
                   </p>
                   <p className="text-sm sm:text-base text-gray-400 mt-2">
                     <DecodeText
-                      text="Specialized courses: Cloud Computing, Agile Methodologies, Software Testing & Quality Assurance, Mobile App Development, and Software Security."
+                      text="Specialized courses: Agile Methodologies, Software Testing & Quality Assurance, and Mobile App Development."
                       isActive={activeTab === 'education'}
                       delay={800}
                     />
