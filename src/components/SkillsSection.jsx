@@ -37,15 +37,14 @@ if (typeof window !== 'undefined') {
 const refreshEvent = new CustomEvent('refreshSkillsSection');
 
 const IconWithTooltip = ({ src, alt }) => (
-  <div className="inline-flex relative group/iconTip">
+  <div className="relative inline-block group">
     <img
       src={src}
       alt={alt}
       className="w-8 h-8 object-contain hover:scale-110 transition-transform duration-200"
     />
-    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 
-      bg-purple-600 text-white text-xs rounded-lg opacity-0 
-      group-hover/iconTip:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none z-50
+    <div className="invisible group-hover:visible absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 
+      bg-purple-600 text-white text-xs rounded-lg px-3 py-1.5 whitespace-nowrap z-50
       before:content-[''] before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 
       before:border-4 before:border-transparent before:border-t-purple-600">
       {alt}
@@ -99,7 +98,7 @@ const SkillsSection = () => {
       text: "Proficient in AWS services, Docker containerization, and CI/CD pipelines. Experienced in automated deployment workflows.",
       icons: [
         { src: AWSVectorIcon, alt: "AWS" },
-        { src: AzureDevOpsIcon, alt: "Azure DevOps" },
+        { src: AzureDevOpsIcon, alt: "Azure" },
         { src: DockerSVGIcon, alt: "Docker" },
         { src: LinuxVectorIcon, alt: "Linux" },
         { src: VercelFillIcon, alt: "Vercel" }
@@ -161,8 +160,8 @@ const SkillsSection = () => {
           {skillsData.map((skill, index) => (
             <div
               key={index}
-              className="skill-card min-w-[280px] w-full rounded-xl bg-gray-800/80 backdrop-blur-sm p-8 
-                relative overflow-hidden shadow-lg transform transition-all duration-300 hover:-translate-y-1"
+              className="skill-card relative w-full rounded-xl bg-gray-800/80 backdrop-blur-sm p-8 
+                overflow-visible shadow-lg transform transition-all duration-300 hover:-translate-y-1"
               style={{
                 boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)',
               }}
@@ -176,7 +175,7 @@ const SkillsSection = () => {
               
               <p className="text-gray-300 mb-6">{skill.text}</p>
               
-              <div className="flex flex-wrap gap-4 items-center justify-start">
+              <div className="flex flex-wrap gap-4 items-center justify-start relative z-10">
                 {skill.icons ? (
                   skill.icons.map((icon, iconIndex) => (
                     <IconWithTooltip

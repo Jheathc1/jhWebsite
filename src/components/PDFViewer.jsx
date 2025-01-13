@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { X } from 'react-feather';
-import { refreshSkillsSection } from './SkillsSection';
 import SkillsSection from './SkillsSection';
 
 const PDFViewer = ({ isOpen, onClose, pdfUrl }) => {
@@ -11,7 +10,6 @@ const PDFViewer = ({ isOpen, onClose, pdfUrl }) => {
       if (isOpen) {
         contentRef.style.opacity = '0';
         contentRef.style.transition = 'opacity 0.3s ease';
-        refreshSkillsSection();
       } else {
         contentRef.style.opacity = '1';
       }

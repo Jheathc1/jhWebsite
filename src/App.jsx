@@ -192,103 +192,102 @@ const App = () => {
 
       {/* Scrollable content */}
       <div className="relative z-10">
-        {/* Hero Section */}
-        <div
-          ref={contentRef}
-          className={`container mx-auto px-6 py-32 transition-opacity duration-500 ${
-            isLoaded ? "opacity-100" : "opacity-0"
-          }`}
+{/* Hero Section */}
+<div
+  ref={contentRef}
+  className={`container mx-auto px-6 py-32 transition-opacity duration-500 ${
+    isLoaded ? "opacity-100" : "opacity-0"
+  }`}
+>
+  <div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-16 max-w-6xl mx-auto">
+    {/* Text Content - Will appear first on mobile */}
+    <div className="flex-1 text-center md:text-left space-y-8 order-first md:order-last">
+      <div className="space-y-4">
+        <h2 className="text-2xl text-white">
+          I'm Jacob Heathcoat, and I enjoy
+        </h2>
+        <h1 className="text-5xl md:text-7xl font-bold leading-tight">
+          creating digital <br />
+          <span
+            ref={gradientTextRef}
+            className={`gradient-text transition-colors duration-300 ${
+              isOrbActive ? "text-transparent" : "text-white"
+            }`}
+            style={{
+              background: `linear-gradient(var(--gradient-angle, 45deg), ${gradients[0].from}, ${gradients[0].to})`,
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+            }}
+          >
+            experiences
+          </span>{" "}
+          <button
+            onClick={() => setIsOrbActive(!isOrbActive)}
+            className="relative inline-flex items-center justify-center w-10 h-10 focus:outline-none transform-gpu"
+          >
+            <div className="absolute w-full h-full">
+              <div
+                ref={orbGlowRef}
+                className="absolute inset-0 rounded-full blur-lg"
+              />
+              <div
+                ref={orbInnerRef}
+                className="absolute inset-2 rounded-full"
+              />
+            </div>
+          </button>
+        </h1>
+        <p className="text-2xl md:text-3xl text-white font-medium mt-6">
+          Full-Stack Developer
+        </p>
+      </div>
+
+      {/* Social Links */}
+      <div className="flex justify-center md:justify-start gap-6 pt-8 relative z-10">
+        <a
+          href="https://www.linkedin.com/in/jacob-heathcoat-3b1627343/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="p-3 rounded-lg backdrop-blur-sm bg-gray-800/80 hover:bg-gray-700/80 transition-colors"
         >
-          <div className="flex flex-col md:flex-row items-start gap-16 max-w-6xl mx-auto">
-            {/* Left Side */}
-            <div className="flex flex-col items-center md:items-start space-y-6">
-              <div className="relative">
-                <img
-                  src={portPhoto}
-                  alt="Portrait"
-                  className="w-96 h-[500px] object-cover rounded-2xl shadow-xl"
-                />
-                <div className="absolute inset-0 rounded-2xl ring-1 ring-white/20" />
-              </div>
-            </div>
+          <Linkedin className="w-6 h-6" />
+        </a>
+        <a
+          href="https://github.com/Jheathc1"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="p-3 rounded-lg backdrop-blur-sm bg-gray-800/80 hover:bg-gray-700/80 transition-colors"
+        >
+          <GitHub className="w-6 h-6" />
+        </a>
+        <a
+          href="mailto:jh.heathcoat@gmail.com"
+          className="p-3 rounded-lg backdrop-blur-sm bg-gray-800/80 hover:bg-gray-700/80 transition-colors"
+        >
+          <Mail className="w-6 h-6" />
+        </a>
+        <button
+          onClick={() => setIsPDFOpen(true)}
+          className="p-3 rounded-lg backdrop-blur-sm bg-gray-800/80 hover:bg-gray-700/80 transition-colors"
+        >
+          <FileText className="w-6 h-6" />
+        </button>
+      </div>
+    </div>
 
-            {/* Right Side */}
-            <div className="flex-1 text-center md:text-left space-y-8 pt-8">
-              <div className="space-y-4">
-                <h2 className="text-2xl text-white">
-                  I'm Jacob Heathcoat, and I enjoy
-                </h2>
-                <h1 className="text-6xl md:text-7xl font-bold leading-tight">
-                  creating digital <br />
-                  <span
-                    ref={gradientTextRef}
-                    className={`gradient-text transition-colors duration-300 ${
-                      isOrbActive ? "text-transparent" : "text-white"
-                    }`}
-                    style={{
-                      background: `linear-gradient(var(--gradient-angle, 45deg), ${gradients[0].from}, ${gradients[0].to})`,
-                      WebkitBackgroundClip: "text",
-                      backgroundClip: "text",
-                    }}
-                  >
-                    experiences
-                  </span>{" "}
-                  <button
-                    onClick={() => setIsOrbActive(!isOrbActive)}
-                    
-                    className="relative inline-flex items-center justify-center w-10 h-10 focus:outline-none transform-gpu"
-                  >
-                    <div className="absolute w-full h-full">
-                      <div
-                        ref={orbGlowRef}
-                        className="absolute inset-0 rounded-full blur-lg"
-                      />
-                      <div
-                        ref={orbInnerRef}
-                        className="absolute inset-2 rounded-full"
-                      />
-                    </div>
-                  </button>
-                </h1>
-                <p className="text-3xl text-white font-medium mt-6">
-                  Full-Stack Developer
-                </p>
-              </div>
-
-              {/* Social Links */}
-              <div className="flex justify-center md:justify-start gap-6 pt-8 relative z-10">
-                <a
-                  href="https://www.linkedin.com/in/jacob-heathcoat-3b1627343/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 rounded-lg backdrop-blur-sm bg-gray-800/80 hover:bg-gray-700/80 transition-colors"
-                >
-                  <Linkedin className="w-6 h-6" />
-                </a>
-                <a
-                  href="https://github.com/Jheathc1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 rounded-lg backdrop-blur-sm bg-gray-800/80 hover:bg-gray-700/80 transition-colors"
-                >
-                  <GitHub className="w-6 h-6" />
-                </a>
-                <a
-                  href="mailto:jh.heathcoat@gmail.com"
-                  className="p-3 rounded-lg backdrop-blur-sm bg-gray-800/80 hover:bg-gray-700/80 transition-colors"
-                >
-                  <Mail className="w-6 h-6" />
-                </a>
-                <button
-                  onClick={() => setIsPDFOpen(true)}
-                  className="p-3 rounded-lg backdrop-blur-sm bg-gray-800/80 hover:bg-gray-700/80 transition-colors"
-                >
-                  <FileText className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+    {/* Image - Will appear second on mobile */}
+    <div className="order-last md:order-first">
+      <div className="relative">
+        <img
+          src={portPhoto}
+          alt="Portrait"
+          className="w-64 md:w-96 h-[350px] md:h-[500px] object-cover rounded-2xl shadow-xl"
+        />
+        <div className="absolute inset-0 rounded-2xl ring-1 ring-white/20" />
+      </div>
+    </div>
+  </div>
+</div>
 
         {/* Career Section */}
         <CareerSection />

@@ -2,235 +2,196 @@ import React, { useState, useCallback, memo } from 'react';
 import DecodeText from './DecodeText';
 import ConcentricCircles from './ConcentricCircles';
 
-// Memoized version of ConcentricCircles
 const MemoizedConcentricCircles = memo(ConcentricCircles);
 
+const TabButton = ({ isActive, onClick, children }) => (
+  <button
+    onClick={onClick}
+    className={`relative px-3 sm:px-6 py-2 sm:py-3 text-base sm:text-lg font-semibold rounded-t-lg transition-all duration-300
+      ${isActive 
+        ? 'text-white bg-gray-800 border-t border-l border-r border-purple-500/20' 
+        : 'text-gray-400 hover:text-white bg-gray-800/50 hover:bg-gray-800/100'}`}
+  >
+    {children}
+    {isActive && (
+      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-purple-500 to-blue-500" />
+    )}
+  </button>
+);
+
 const CareerSection = () => {
-  const [activeSection, setActiveSection] = useState('education');
+  const [activeTab, setActiveTab] = useState('education');
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [pendingSection, setPendingSection] = useState(null);
+  const [tabDirection, setTabDirection] = useState('education');
 
-  const handleSectionClick = useCallback((section) => {
-    if (section === activeSection || isTransitioning) return;
+  const handleTabChange = useCallback((tab) => {
+    if (tab === activeTab || isTransitioning) return;
     setIsTransitioning(true);
-    setPendingSection(section);
-  }, [activeSection, isTransitioning]);
-
-  const handleTransitionComplete = useCallback(() => {
-    if (pendingSection) {
-      setActiveSection(pendingSection);
-      setPendingSection(null);
-
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 500);
-    }
-  }, [pendingSection]);
+    setTabDirection(tab);
+    setActiveTab(tab);
+    setTimeout(() => setIsTransitioning(false), 500);
+  }, [activeTab, isTransitioning]);
 
   return (
-    <div className="w-full py-24">
+    <div className="w-full py-12 sm:py-24">
       <div className="w-full relative">
-        <div className="max-w-7xl mx-auto px-6 py-10">
-          <div className="flex gap-4 transition-all duration-500 ease-in-out">
-            {/* Education Section */}
-            <div
-              className={`relative rounded-2xl bg-gray-800 p-8 transition-all duration-500 ease-in-out cursor-pointer overflow-hidden 
-                border border-transparent hover:border-purple-500/50
-                ${activeSection === 'education' ? 'w-[1500px]' : 'w-[500px]'}
-                min-h-[400px] h-[425px]`}
-              onClick={() => handleSectionClick('education')}
-              style={{
-                boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)',
-              }}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          {/* Tabs */}
+          <div className="flex gap-1 sm:gap-2 mb-[-1px] relative z-10 ml-2 sm:ml-4">
+            <TabButton 
+              isActive={activeTab === 'education'} 
+              onClick={() => handleTabChange('education')}
             >
-              {/* Glowing purple border */}
-              <div className="absolute inset-0 border border-purple-500/20 rounded-2xl group-hover:border-purple-500/50 transition-colors duration-300" />
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-2xl blur-xl" />
-              </div>
+              Education
+            </TabButton>
+            <TabButton 
+              isActive={activeTab === 'career'} 
+              onClick={() => handleTabChange('career')}
+            >
+              Career
+            </TabButton>
+          </div>
 
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-4xl font-bold text-white">Education</h2>
-              </div>
+          {/* Content Container */}
+          <div 
+            className="relative rounded-xl bg-gray-800 p-4 sm:p-8 min-h-[350px] overflow-hidden
+              border border-purple-500/20 transition-all duration-500"
+            style={{
+              boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)',
+            }}
+          >
+            {/* Background Decoration */}
+            <div className="hidden md:block absolute right-8 w-64 h-64 top-1/2 -translate-y-1/2 overflow-hidden">
+              <MemoizedConcentricCircles
+                isActive={true}
+                isTransitioning={isTransitioning}
+                tabDirection={tabDirection}
+              />
+            </div>
 
-              <div
-                className={`transition-opacity duration-500 ${
-                  activeSection === 'education' ? 'opacity-100' : 'opacity-0'
-                }`}
-              >
-                <div className="space-y-8">
-                  <div className="border-l-2 border-purple-500 pl-4">
-                    <h3 className="text-xl font-semibold text-white">
-                      <DecodeText
-                        text="Arizona State University"
-                        isActive={activeSection === 'education'}
-                        delay={300}
-                      />
-                    </h3>
-                    <p className="text-gray-400">
-                      <DecodeText
-                        text="Bachelor of Science in Software Engineering"
-                        isActive={activeSection === 'education'}
-                        delay={400}
-                      />
-                    </p>
-                    <p className="text-gray-500">
-                      <DecodeText
-                        text="2020 - 2025"
-                        isActive={activeSection === 'education'}
-                        delay={500}
-                      />
-                    </p>
-                    <p className="text-gray-400 mt-2">
-                      <DecodeText
-                        text="GPA (Current): 4.0"
-                        isActive={activeSection === 'education'}
-                        delay={600}
-                      />
-                    </p>
-                    <p className="text-gray-400 mt-2">
-                        <DecodeText
-                          text="Core coursework: Data Structures & Algorithms, Object-Oriented Programming, Software Design & Architecture, Web Development, Database Systems, Operating Systems, and Computer Networks."
-                          isActive={activeSection === 'education'}
-                          delay={700}
-                        />
-                      </p>
-                      <p className="text-gray-400 mt-2">
-                        <DecodeText
-                          text="Specialized courses: Cloud Computing, Agile Methodologies, Software Testing & Quality Assurance, Mobile App Development, Software Security and Machine Learning."
-                          isActive={activeSection === 'education'}
-                          delay={800}
-                        />
-                      </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Collapsed View with Concentric Circles */}
-              <div
-                className={`absolute inset-0 flex items-center justify-center 
-                ${
-                  activeSection === 'education'
-                    ? 'opacity-0 pointer-events-none transition-opacity duration-200'
-                    : 'opacity-100 transition-opacity duration-700 delay-700'
-                }`}
-              >
-                <div className="w-full h-full">
-                  <MemoizedConcentricCircles
-                    isActive={activeSection !== 'education'}
-                    isTransitioning={isTransitioning && pendingSection === 'education'}
-                    onTransitionComplete={handleTransitionComplete}
-                  />
+            {/* Education Content */}
+            <div
+              className={`transition-all duration-500 absolute inset-4 sm:inset-8
+                ${activeTab === 'education' 
+                  ? 'opacity-100 translate-x-0' 
+                  : 'opacity-0 -translate-x-8 pointer-events-none'}`}
+            >
+              <div className="space-y-4 sm:space-y-8 max-w-3xl relative z-10">
+                <div className="border-l-2 border-purple-500 pl-4">
+                  <h3 className="text-lg sm:text-xl font-semibold text-white">
+                    <DecodeText
+                      text="Arizona State University"
+                      isActive={activeTab === 'education'}
+                      delay={300}
+                    />
+                  </h3>
+                  <p className="text-sm sm:text-base text-gray-400">
+                    <DecodeText
+                      text="Bachelor of Science in Software Engineering"
+                      isActive={activeTab === 'education'}
+                      delay={400}
+                    />
+                  </p>
+                  <p className="text-sm sm:text-base text-gray-500">
+                    <DecodeText
+                      text="2020 - 2025"
+                      isActive={activeTab === 'education'}
+                      delay={500}
+                    />
+                  </p>
+                  <p className="text-sm sm:text-base text-gray-400 mt-2">
+                    <DecodeText
+                      text="GPA (Current): 4.0"
+                      isActive={activeTab === 'education'}
+                      delay={600}
+                    />
+                  </p>
+                  <p className="text-sm sm:text-base text-gray-400 mt-2">
+                    <DecodeText
+                      text="Core coursework: Data Structures & Algorithms, Object-Oriented Programming, Software Design & Architecture, Web Development, Database Systems, Operating Systems, and Computer Networks."
+                      isActive={activeTab === 'education'}
+                      delay={700}
+                    />
+                  </p>
+                  <p className="text-sm sm:text-base text-gray-400 mt-2">
+                    <DecodeText
+                      text="Specialized courses: Cloud Computing, Agile Methodologies, Software Testing & Quality Assurance, Mobile App Development, Software Security and Machine Learning."
+                      isActive={activeTab === 'education'}
+                      delay={800}
+                    />
+                  </p>
                 </div>
               </div>
             </div>
 
-            {/* Career Section */}
+            {/* Career Content */}
             <div
-              className={`relative rounded-2xl bg-gray-800 p-8 transition-all duration-500 ease-in-out cursor-pointer overflow-hidden 
-                border border-transparent hover:border-purple-500/50
-                ${activeSection === 'career' ? 'w-[1500px]' : 'w-[500px]'}
-                min-h-[400px] h-[425px]`}
-              onClick={() => handleSectionClick('career')}
-              style={{
-                boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)',
-              }}
+              className={`transition-all duration-500 absolute inset-4 sm:inset-8
+                ${activeTab === 'career' 
+                  ? 'opacity-100 translate-x-0' 
+                  : 'opacity-0 translate-x-8 pointer-events-none'}`}
             >
-              {/* Glowing purple border */}
-              <div className="absolute inset-0 border border-purple-500/20 rounded-2xl group-hover:border-purple-500/50 transition-colors duration-300" />
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-2xl blur-xl" />
-              </div>
-
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-4xl font-bold text-white">Career</h2>
-              </div>
-
-              <div
-                className={`transition-opacity duration-500 ${
-                  activeSection === 'career' ? 'opacity-100' : 'opacity-0'
-                }`}
-              >
-                <div className="space-y-8">
-                  <div className="border-l-2 border-blue-500 pl-4">
-                    <h3 className="text-xl font-semibold text-white">
-                      <DecodeText
-                        text="Network Operations Engineer"
-                        isActive={activeSection === 'career'}
-                        delay={300}
-                      />
-                    </h3>
-                    <p className="text-gray-400">
-                      <DecodeText
-                        text="Cox Communications"
-                        isActive={activeSection === 'career'}
-                        delay={400}
-                      />
-                    </p>
-                    <p className="text-gray-500">
-                      <DecodeText
-                        text="2021 - Present"
-                        isActive={activeSection === 'career'}
-                        delay={500}
-                      />
-                    </p>
-                    <p className="text-gray-400 mt-2">
-                      <DecodeText
-                        text="Leveraged network monitoring tools and technical expertise to redesign infrastructure and diagnose signal issues across RF and optical systems."
-                        isActive={activeSection === 'career'}
-                        delay={600}
-                      />
-                    </p>
-                  </div>
-
-                  <div className="border-l-2 border-blue-500 pl-4">
-                    <h3 className="text-xl font-semibold text-white">
-                      <DecodeText
-                        text="Core Technology Technician"
-                        isActive={activeSection === 'career'}
-                        delay={700}
-                      />
-                    </h3>
-                    <p className="text-gray-400">
-                      <DecodeText
-                        text="Cox Communications"
-                        isActive={activeSection === 'career'}
-                        delay={800}
-                      />
-                    </p>
-                    <p className="text-gray-500">
-                      <DecodeText
-                        text="2012 - 2021"
-                        isActive={activeSection === 'career'}
-                        delay={900}
-                      />
-                    </p>
-                    <p className="text-gray-400 mt-2">
-                      <DecodeText
-                        text="Installed and maintained residential broadband services while providing expert troubleshooting support and mentoring new technicians."
-                        isActive={activeSection === 'career'}
-                        delay={1000}
-                      />
-                    </p>
-                  </div>
+              <div className="space-y-4 sm:space-y-8 max-w-3xl relative z-10">
+                <div className="border-l-2 border-blue-500 pl-4">
+                  <h3 className="text-lg sm:text-xl font-semibold text-white">
+                    <DecodeText
+                      text="Network Operations Engineer"
+                      isActive={activeTab === 'career'}
+                      delay={300}
+                    />
+                  </h3>
+                  <p className="text-sm sm:text-base text-gray-400">
+                    <DecodeText
+                      text="Cox Communications"
+                      isActive={activeTab === 'career'}
+                      delay={400}
+                    />
+                  </p>
+                  <p className="text-sm sm:text-base text-gray-500">
+                    <DecodeText
+                      text="2021 - Present"
+                      isActive={activeTab === 'career'}
+                      delay={500}
+                    />
+                  </p>
+                  <p className="text-sm sm:text-base text-gray-400 mt-2">
+                    <DecodeText
+                      text="Leveraged network monitoring tools and technical expertise to redesign infrastructure and diagnose signal issues across RF and optical systems."
+                      isActive={activeTab === 'career'}
+                      delay={600}
+                    />
+                  </p>
                 </div>
-              </div>
 
-              {/* Collapsed View with Concentric Circles */}
-              <div
-                className={`absolute inset-0 flex items-center justify-center 
-                ${
-                  activeSection === 'career'
-                    ? 'opacity-0 pointer-events-none transition-opacity duration-200'
-                    : 'opacity-100 transition-opacity duration-700 delay-700'
-                }`}
-              >
-                <div className="w-full h-full">
-                  <MemoizedConcentricCircles
-                    isActive={activeSection !== 'career'}
-                    isTransitioning={isTransitioning && pendingSection === 'career'}
-                    onTransitionComplete={handleTransitionComplete}
-                  />
+                <div className="border-l-2 border-blue-500 pl-4">
+                  <h3 className="text-lg sm:text-xl font-semibold text-white">
+                    <DecodeText
+                      text="Core Technology Technician"
+                      isActive={activeTab === 'career'}
+                      delay={700}
+                    />
+                  </h3>
+                  <p className="text-sm sm:text-base text-gray-400">
+                    <DecodeText
+                      text="Cox Communications"
+                      isActive={activeTab === 'career'}
+                      delay={800}
+                    />
+                  </p>
+                  <p className="text-sm sm:text-base text-gray-500">
+                    <DecodeText
+                      text="2012 - 2021"
+                      isActive={activeTab === 'career'}
+                      delay={900}
+                    />
+                  </p>
+                  <p className="text-sm sm:text-base text-gray-400 mt-2">
+                    <DecodeText
+                      text="Installed and maintained residential broadband services while providing expert troubleshooting support and mentoring new technicians."
+                      isActive={activeTab === 'career'}
+                      delay={1000}
+                    />
+                  </p>
                 </div>
               </div>
             </div>
@@ -241,5 +202,4 @@ const CareerSection = () => {
   );
 };
 
-// Use memo to prevent unnecessary rerenders from parent state changes
 export default memo(CareerSection);

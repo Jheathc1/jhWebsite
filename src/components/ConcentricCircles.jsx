@@ -1,26 +1,28 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import MotionPathPlugin from 'gsap/MotionPathPlugin';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
 // Register plugins
 if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+  gsap.registerPlugin(ScrollTrigger);
 }
 
-const ConcentricCircles = ({ isActive, isTransitioning, onTransitionComplete }) => {
+const ConcentricCircles = ({ isActive, isTransitioning, tabDirection }) => {
   const svgRef = useRef(null);
   const containerRef = useRef(null);
   const timelineRef = useRef(null);
 
+  // Handle spin animation on tab change
   useEffect(() => {
-    // Reset animation state when transitioning completes
-    if (!isTransitioning && containerRef.current) {
-      gsap.set(containerRef.current, {
-        clearProps: "all"
+    if (isTransitioning && svgRef.current) {
+      const direction = tabDirection === 'career' ? 360 : -360;
+      gsap.to(svgRef.current, {
+        rotation: `+=${direction}`,
+        duration: 0.8,
+        ease: "power2.inOut"
       });
     }
-  }, [isTransitioning]);
+  }, [isTransitioning, tabDirection]);
 
   useEffect(() => {
     // Cleanup function for previous animations
@@ -29,13 +31,11 @@ const ConcentricCircles = ({ isActive, isTransitioning, onTransitionComplete }) 
         timelineRef.current.kill();
         timelineRef.current = null;
       }
-      // Only kill ScrollTriggers specific to this component
       ScrollTrigger.getAll().forEach(st => {
         if (st.vars.trigger === svgRef.current) {
           st.kill();
         }
       });
-      gsap.killTweensOf(containerRef.current);
     };
 
     // Initialize the animation
@@ -67,11 +67,8 @@ const ConcentricCircles = ({ isActive, isTransitioning, onTransitionComplete }) 
       };
 
       const getTrailCount = (layerIndex) => {
-        if (layerIndex <= 2) {
-          return 2 + layerIndex;
-        } else {
-          return 1 + layerIndex;
-        }
+        if (layerIndex <= 2) return 2 + layerIndex;
+        return 1 + layerIndex;
       };
 
       const getLayerProperties = (layerIndex) => {
@@ -86,6 +83,7 @@ const ConcentricCircles = ({ isActive, isTransitioning, onTransitionComplete }) 
       const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
       svg.appendChild(defs);
 
+      // Center circle gradient
       const centerGradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
       centerGradient.id = `center-gradient-${Math.random()}`;
       centerGradient.innerHTML = `
@@ -103,41 +101,21 @@ const ConcentricCircles = ({ isActive, isTransitioning, onTransitionComplete }) 
       centerCircle.style.filter = "brightness(1.2) blur(0.5px)";
       svg.appendChild(centerCircle);
 
-      timelineRef.current = gsap.timeline({
-        onComplete: () => {
-          if (isTransitioning && onTransitionComplete) {
-            onTransitionComplete();
+      timelineRef.current = gsap.timeline({ paused: true });
+      const tl = timelineRef.current;
+
+      // Create scroll-triggered animation
+      ScrollTrigger.create({
+        trigger: svg,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1,
+        onUpdate: function(self) {
+          if (tl && typeof self.progress === 'number') {
+            tl.progress(self.progress);
           }
         }
       });
-
-      if (isTransitioning) {
-        timelineRef.current
-          .to(containerRef.current, {
-            scale: 3,
-            duration: 0.8,
-            ease: "power2.inOut"
-          })
-          .to(containerRef.current, {
-            opacity: 0,
-            duration: 0.2,
-            ease: "power2.in"
-          }, "-=0.2");
-      } else if (isActive) {
-        timelineRef.current.pause();
-        const tl = timelineRef.current;
-        ScrollTrigger.create({
-          trigger: svg,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-          onUpdate: function(self) {
-            if (tl && typeof self.progress === 'number') {
-              tl.progress(self.progress);
-            }
-          }
-        });
-      }
 
       for (let i = 0; i < totalLayers; i++) {
         const radius = baseRadius + (i * radiusIncrement);
@@ -169,10 +147,7 @@ const ConcentricCircles = ({ isActive, isTransitioning, onTransitionComplete }) 
           svg.appendChild(trail);
 
           const updatePath = (progress) => {
-            const currentSpeedMultiplier = isTransitioning ? 2 : speedMultiplier;
-            const currentDirection = isTransitioning ? 1 : direction;
-            
-            const currentAngle = (startOffset + progress * currentSpeedMultiplier) * Math.PI * 2 * currentDirection;
+            const currentAngle = (startOffset + progress * speedMultiplier) * Math.PI * 2 * direction;
             const trailStartAngle = currentAngle - 1.5;
             
             const getPoint = (angle) => ({
@@ -192,8 +167,8 @@ const ConcentricCircles = ({ isActive, isTransitioning, onTransitionComplete }) 
 
           if (timelineRef.current) {
             timelineRef.current.to({}, {
-              duration: isTransitioning ? 0.8 : 1,
-              ease: isTransitioning ? "power2.in" : "none",
+              duration: 1,
+              ease: "none",
               onUpdate: function() {
                 updatePath(this.progress());
               }
@@ -203,14 +178,14 @@ const ConcentricCircles = ({ isActive, isTransitioning, onTransitionComplete }) 
       }
     };
 
-    if (isActive || isTransitioning) {
+    if (isActive) {
       initAnimation();
     }
 
     return () => {
       cleanupAnimations();
     };
-  }, [isActive, isTransitioning, onTransitionComplete]);
+  }, [isActive]);
 
   return (
     <div className="w-full h-full flex items-center justify-center overflow-hidden" ref={containerRef}>
