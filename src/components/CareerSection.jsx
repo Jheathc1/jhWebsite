@@ -135,7 +135,7 @@ const CareerSection = () => {
                 <div className="border-l-2 border-blue-500 pl-4">
                   <h3 className="text-lg sm:text-xl font-semibold text-white">
                     <DecodeText
-                      text="Network Operations Engineer"
+                      text="Network Operations Technician"
                       isActive={activeTab === 'career'}
                       delay={300}
                     />
